@@ -1,95 +1,113 @@
 # PETER — Soft-Pneumatic Modular Platform (Closed-Loop Control)
 
 **Summer Research Project — Universidad Politécnica de Madrid (UPM), CAR Robotics & Cybernetics**  
-**Project Period:** June 2025 – July 2025  
+**Period:** June 2025 – July 2025  
 **Researcher:** Emirhan Yolcu (METU)  
 **Mentor:** Jorge Garcia Samartin (PhD)  
 **Supervisor:** Prof. Dr. Antonio Barrientos
 
 ---
 
-## 🎥 Demonstrations
+## 🎯 Introduction
 
-**Disturbance Rejection Test (Closed-loop):**  
-https://youtube.com/shorts/rUIRMNMMSJA?feature=share
+PETER is a modular soft-pneumatic platform capable of regulating its pose (pitch–roll–height) using inflatable legs with sensor-based closed-loop control. The system was first implemented in a **single-module configuration**, then extended to a **two-module architecture** with independent sensing and actuation.
 
-*(Insert additional test links here if added later)*
+![Single-module early prototype](media/photos/image1.png)
 
----
-
-## 📡 Project Overview
-
-**PETER** is a soft-pneumatic, modular parallel platform capable of actively regulating its pose (pitch–roll–height) through inflatable actuators. The system uses **IMU** and **Time-of-Flight sensors** for real-time feedback and maintains a commanded Cartesian center location via a closed-loop controller.
-
-The platform was first implemented in a **single-module configuration**, then extended to a **two-module architecture** with separate feedback on each module.
+The primary objective of the internship was to develop the full kinematic control pipeline, implement real-time feedback stabilization, and perform validation using OptiTrack motion capture.
 
 ---
 
-## ⚙️ System Architecture
+## ⚙️ System Overview
 
-The system consists of:
+The platform consists of:
+- Three soft-pneumatic legs per module  
+- IMU and ToF sensing for orientation and height feedback  
+- MATLAB-based inverse/forward kinematic mapping  
+- Arduino for valve actuation and sensor interfacing  
+- Optional multi-module architecture with shared Cartesian commands
 
-1. **Pneumatic Actuation Module** — 3 inflatable legs per module, with directional valves  
-2. **Sensor Suite** — IMUs for (p,r), ToF for height, I²C multi-device handling  
-3. **Control Layer (MATLAB)** — Cartesian → (p,r,h) → leg lengths → valve commands  
-4. **Embedded Layer (Arduino)** — Solenoid valve timing, ToF re-addressing, IMU sampling  
-5. **Validation Setup** — OptiTrack motion capture with MATLAB-based reprojection & comparison
+![Two-module assembly](media/photos/image4.png)
 
----
-
-## 🧩 Single vs Two-Module Control
-
-### **Single-Module**
-
-- Global (x,y,h) target is converted to platform orientation and leg heights  
-- One IMU + one ToF sensor provide feedback  
-- P controller closes the loop
-
-### **Two-Module**
-
-- Required leg lengths are split across modules  
-- Each module uses its own IMU + ToF for independent regulation  
-- I²C conflicts resolved via electrical & software re-addressing
+All computation for (x,y,h) → (p,r,h) → leg lengths is done in MATLAB, while the timing of valve commands runs on Arduino.
 
 ---
 
-## 📐 Core Algorithms
+## 🧭 Single-Module Closed-Loop Architecture
 
-- **`xyh_to_prh`** — inverse kinematics (MATLAB, cost minimization via `fminsearch`)
-- **`prh_to_leg_heights`** — forward mapping from orientation to actuator space
-- **`prh_to_xyh`** — back-projection for validation & IMU-based comparison
+![Single loop architecture](media/diagrams/single_loop.png)
 
-All mappings are used inside the real-time loop for error evaluation and actuator driving.
+Workflow:
+1) Desired (x,y,h) → `xyh_to_prh` → (p,r,h)  
+2) (p,r,h) → `prh_to_leg_heights` → target legs  
+3) IMU+ToF → measured (p,r,h)  
+4) Error computed → P controller → valve commands
 
----
-
-## ✅ Experimental Validation
-
-Two-stage evaluation was conducted:
-
-1) **Disturbance Rejection at (0,0)**  
-Platform maintains equilibrium under external push  
-→ Video linked above
-
-2) **OptiTrack-Based Validation**  
-Orientation and reconstructed center point compared against motion-capture ground truth  
-→ Scripts available under `code_matlab/Validation`
+The loop continues until the platform stabilizes at the commanded spatial location.
 
 ---
 
-## 🚀 Roadmap
+## 🧩 Two-Module Architecture
 
-- Experimental system-identification of PETER for model-based design  
-- Alternative control (PD/LQR, filtered PI, anti-windup)  
-- Use of I²C multiplexer for cleaner wiring & stable addressing  
-- Replacement of ToF with higher-fidelity distance sensing
+![Dual loop architecture](media/diagrams/dual_loop.png)
+
+In the dual-module setup:
+- Top-level leg lengths are split across both modules  
+- Each module has its **own IMU + ToF** and closes its own loop  
+- I²C conflicts are resolved with hardware & software re-addressing  
+
+This enables scalable multi-segment soft robotic structures.
 
 ---
 
-## 🏛️ Acknowledgements
+## 🧮 Kinematic Functions
 
-Work conducted at **UPM — CAR Robotics & Cybernetics Laboratory**  
-Mentored by **Jorge Garcia Samartin**, supervised by **Prof. Barrientos**  
-Prepared as part of a funded summer research internship (2025)
+- `xyh_to_prh` — inverse mapping using nonlinear cost minimization (`fminsearch`)
+- `prh_to_leg_heights` — Rodrigues-based forward kinematics for actuator lengths
+- `prh_to_xyh` — Cartesian back-projection for feedback and validation
+
+These three functions form the computational backbone of the controller.
+
+---
+
+## ✅ Validation & Experiments
+
+Two validation stages were conducted:
+
+**(1) Disturbance Rejection Test at (0,0)**  
+External pushes applied — system recovers to neutral point.  
+Video: https://youtube.com/shorts/rUIRMNMMSJA?feature=share
+
+**(2) OptiTrack Laboratory Validation**  
+Ground truth pose from OptiTrack was compared to reconstructed pose from measured (p,r,h).
+
+![OptiTrack comparison](media/results/image5.png)
+
+IMU data proved stable enough for control. ToF readings were noisier — alternative height sensing is recommended.
+
+---
+
+## 📈 Full Report (PDF)
+
+[📄 **Open Full Report**](docs/PETER_Project_Summer_Internship_Report.pdf)
+
+The report includes detailed derivations, diagrams, test procedures, OptiTrack validation, and improvement plan.
+
+---
+
+## 🚀 Future Work
+
+- System identification of PETER using excitation signals  
+- LQR / PD / filtered PI & anti-windup trials  
+- I²C multiplexer for reliability and cleaner wiring  
+- Better height sensing alternatives to ToF  
+- Modular extension beyond two-segment structure
+
+---
+
+## 🏛️ Credits
+
+This work was conducted at **UPM — CAR Robotics & Cybernetics Lab**  
+Mentored by **Jorge Garcia Samartin** and supervised by **Prof. Antonio Barrientos**
 
 ---
