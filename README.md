@@ -1,7 +1,7 @@
 # PETER — Soft-Pneumatic Modular Platform (Closed-Loop Control)
 
 **Summer Research Project — Universidad Politécnica de Madrid (UPM), CAR Robotics & Cybernetics**  
-**Period:** June 2025 – July 2025  
+**Period:** Summer 2025  
 **Researcher:** Emirhan Yolcu (METU)  
 **Mentor:** Jorge Garcia Samartin (PhD)  
 **Supervisor:** Prof. Dr. Antonio Barrientos
