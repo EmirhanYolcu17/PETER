@@ -5,11 +5,11 @@
 **Researcher:** Emirhan Yolcu (METU)  
 **Mentor:** Jorge Garcia Samartin (PhD)  
 **Supervisor:** Prof. Dr. Antonio Barrientos
-
-Note: This project is a continuation of the research presented in the paper “PETER: A Soft Pneumatic Manipulator with High Resistance and Load Capacity.”
-The work described in this repository was conducted as a follow-up study within the same laboratory, aiming to extend the findings of the original paper. The current implementation focuses on transforming the paper’s concepts into a fully functional, closed-loop controlled platform and serves as an experimental foundation for future publications.
 ---
-
+ **Note:** This project is a continuation of the research presented in the paper  
+> *“PETER: A Soft Pneumatic Manipulator with High Resistance and Load Capacity.”*  
+> The work described here was carried out as a follow-up study within the same laboratory to extend the findings of that publication. The current implementation focuses on transforming the concepts introduced in the paper into a fully functional, closed-loop controlled modular platform, and ongoing experiments aim to further develop it into a journal-ready study.
+---
 ## 🎯 Introduction
 
 PETER is a modular soft-pneumatic platform capable of regulating its pose (pitch–roll–height) using inflatable legs with sensor-based closed-loop control. The system was first implemented in a **single-module configuration**, then extended to a **two-module architecture** with independent sensing and actuation.
