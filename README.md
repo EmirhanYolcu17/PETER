@@ -6,8 +6,8 @@
 **Mentor:** Jorge Garcia Samartin (PhD)  
 **Supervisor:** Prof. Dr. Antonio Barrientos
 ---
- **Note:** This project is a continuation of the research presented in the paper  
-> *“PETER: A Soft Pneumatic Manipulator with High Resistance and Load Capacity.”*  
+ **Note:** 
+> This project is a continuation of the research presented in the paper *“PETER: A Soft Pneumatic Manipulator with High Resistance and Load Capacity.”*  
 > The work described here was carried out as a follow-up study within the same laboratory to extend the findings of that publication. The current implementation focuses on transforming the concepts introduced in the paper into a fully functional, closed-loop controlled modular platform, and ongoing experiments aim to further develop it into a journal-ready study.
 ---
 ## 🎯 Introduction
